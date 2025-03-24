@@ -59,10 +59,11 @@ jobs:
         zip -r ../tomcat-sample-app.zip .
         
     - name: 빌드 아티팩트 업로드
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: deployment-package
         path: tomcat-sample-app.zip
+        retention-days: 1
 
   deploy:
     name: 배포
@@ -72,7 +73,7 @@ jobs:
     
     steps:
     - name: 빌드 아티팩트 다운로드
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v4
       with:
         name: deployment-package
     
@@ -84,7 +85,7 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
     
     - name: S3에 아티팩트 업로드
-      run: aws s3 cp deployment-package/tomcat-sample-app.zip s3://${{ secrets.S3_BUCKET }}/tomcat-sample-app.zip
+      run: aws s3 cp tomcat-sample-app.zip s3://${{ secrets.S3_BUCKET }}/tomcat-sample-app.zip
     
     - name: CodeDeploy 배포 생성
       run: |
