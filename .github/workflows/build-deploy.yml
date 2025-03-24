@@ -8,17 +8,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build:
+    name: 빌드
     runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v3
     
-    - name: JDK 8 설정
+    - name: JDK 7 설정
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
-        java-version: '8'
+        java-version: '7'
         cache: maven
     
     - name: Maven 설정
@@ -37,6 +38,25 @@ jobs:
         cp appspec.yml deployment/
         cd deployment
         zip -r ../tomcat-sample-app.zip .
+        
+    - name: 빌드 아티팩트 업로드
+      uses: actions/upload-artifact@v3
+      with:
+        name: deployment-package
+        path: tomcat-sample-app.zip
+        retention-days: 1
+
+  deploy:
+    name: 배포
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    
+    steps:
+    - name: 빌드 아티팩트 다운로드
+      uses: actions/download-artifact@v3
+      with:
+        name: deployment-package
     
     - name: AWS 자격 증명 설정
       uses: aws-actions/configure-aws-credentials@v1
