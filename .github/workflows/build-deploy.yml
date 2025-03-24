@@ -28,7 +28,12 @@ jobs:
         maven-version: '3.6.3'
     
     - name: Maven으로 빌드
-      run: mvn clean package -Djava.source=1.7 -Djava.target=1.7
+      run: |
+        mvn -B clean compile test package \
+          -Dmaven.compiler.source=1.7 \
+          -Dmaven.compiler.target=1.7 \
+          -Djava.source=1.7 \
+          -Djava.target=1.7
     
     - name: 배포 패키지 압축
       run: |
@@ -40,7 +45,7 @@ jobs:
         zip -r ../tomcat-sample-app.zip .
         
     - name: 빌드 아티팩트 업로드
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         name: deployment-package
         path: tomcat-sample-app.zip
@@ -54,7 +59,7 @@ jobs:
     
     steps:
     - name: 빌드 아티팩트 다운로드
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v2
       with:
         name: deployment-package
     
