@@ -5,6 +5,10 @@ files:
     destination: /tmp
 
 hooks:
+  ApplicationStop:
+    - location: scripts/appspec_hook.sh
+      timeout: 300
+      runas: root
   BeforeInstall:
     - location: scripts/before_install.sh
       timeout: 300
