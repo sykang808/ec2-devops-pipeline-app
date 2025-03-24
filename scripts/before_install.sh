@@ -10,20 +10,24 @@ then
 fi
 
 # Tomcat이 설치되어 있는지 확인
-if ! systemctl status tomcat7 &> /dev/null
+if ! systemctl status tomcat &> /dev/null
 then
-    yum install -y tomcat7 tomcat7-webapps tomcat7-admin-webapps
-    systemctl start tomcat7
-    systemctl enable tomcat7
+    yum install -y tomcat tomcat-webapps tomcat-admin-webapps
+    systemctl start tomcat
+    systemctl enable tomcat
 fi
+
+# 배포 로그 파일 생성
+touch /var/log/tomcat-deploy.log
+chown tomcat:tomcat /var/log/tomcat-deploy.log
 
 # 이전 배포 정리
-if [ -d /var/lib/tomcat7/webapps/ROOT ]; then
-    rm -rf /var/lib/tomcat7/webapps/ROOT
+if [ -d /var/lib/tomcat/webapps/ROOT ]; then
+    rm -rf /var/lib/tomcat/webapps/ROOT
 fi
 
-if [ -f /var/lib/tomcat7/webapps/ROOT.war ]; then
-    rm -f /var/lib/tomcat7/webapps/ROOT.war
+if [ -f /var/lib/tomcat/webapps/ROOT.war ]; then
+    rm -f /var/lib/tomcat/webapps/ROOT.war
 fi
 
 echo "Before install completed" 

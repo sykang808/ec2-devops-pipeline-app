@@ -1,6 +1,6 @@
 #!/bin/bash
 # Tomcat 재시작
-systemctl restart tomcat7
+systemctl restart tomcat
 
 # 배포 로그 기록
 echo "Application restart requested at $(date)" >> /var/log/tomcat-deploy.log

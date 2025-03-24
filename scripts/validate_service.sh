@@ -3,7 +3,7 @@
 sleep 5
 
 # Tomcat 프로세스 확인
-if ! pgrep -f tomcat7 > /dev/null
+if ! pgrep -f tomcat > /dev/null
 then
     echo "Tomcat 프로세스가 실행되지 않고 있습니다."
     exit 1
